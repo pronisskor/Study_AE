@@ -39,9 +39,12 @@ def generate_sentence_with_word(word):
                 {"role": "user", "content": f"Please create a short and simple sentence using the word {word}."}
             ]
         )
-        return response.choices[0].message['content']
+        sentence = response.choices[0].message['content']
+        # Assume the sentence is in English and the translation in Korean is also generated
+        return sentence, "Translated Korean sentence"  # Placeholder for Korean translation
     except Exception as e:
         st.error("Error generating sentence: " + str(e))
+        return None, None
 
 # 사용자 인터페이스와 로직 흐름
 if 'words_list' in st.session_state and st.session_state['words_list']:
