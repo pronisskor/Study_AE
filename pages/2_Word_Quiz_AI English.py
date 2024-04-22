@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 import random
 
+with st.sidebar:
+    openai_api_key = st.text_input(
+        "OpenAI API Key", key="langchain_search_api_key_openai", type="password"
+    )
+    "[Open AI API 키 받으러 가기](https://platform.openai.com/account/api-keys)"
+
 # 스트림릿 앱의 제목 설정
 st.title("영어 단어 퀴즈")
 
