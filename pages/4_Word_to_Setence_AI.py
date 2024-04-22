@@ -23,12 +23,14 @@ excel_url = "http://ewking.kr/AE/word_sentence.xlsx"  # URL 수정 확인
 df = pd.read_excel(excel_url)
 
 # 파일이 성공적으로 불러와졌는지 확인 후 단어 리스트 세션 상태 설정
-if 'words' in df.columns:
-    words_list = df['words'].dropna().tolist()
-    random.shuffle(words_list)
-    if 'words_list' not in st.session_state:
-        st.session_state['words_list'] = words_list
-        st.session_state['learned_count'] = 0  # 학습 카운터를 세션 상태에 추가
+if st.button("Restart"):
+    if 'words_list' in st.session_state:
+        st.session_state.pop('words_list')
+        # 추가적인 파일 처리 로직
+        # 예: 단어 리스트를 불러오고, 각 단어에 대한 문장을 생성
+if 'words_list' not in st.session_state:
+    st.session_state['words_list'] = []
+    st.session_state['learned_count'] = 0  # 학습 카운터를 세션 상태에 추가
 
 def generate_sentence_with_word(word):
     try:
