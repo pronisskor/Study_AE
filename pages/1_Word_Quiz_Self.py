@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 with st.sidebar:
-    "Open AI API 키 받으러 가기"    
+    "OpenAI API 키 받으러 가기"    
 
 st.title("영어 단어 퀴즈")
 
