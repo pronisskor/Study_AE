@@ -27,7 +27,7 @@ if 'words_list' not in st.session_state or 'learned_count' not in st.session_sta
     st.session_state['learned_count'] = 0
 
 def load_words():
-    file_name = './word_sentence.xlsx'
+    file_name = './http://ewking.kr/AE/word_sentence.xlsx'
     if file_name.endswith('.csv'):
         df = pd.read_csv(file_name)
     elif file_name.endswith('.xlsx') or file_name.endswith('.xls'):
