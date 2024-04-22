@@ -45,14 +45,23 @@ def generate_sentence_with_word(word):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a conversation sentence generator."},
-                {"role": "user", "content": f"Please create a short and simple sentence using the word {word}."}
+                {"role": "user", "content": f"Please create a short and simple sentence using the easy word '{word}'."}
             ]
         )
-        sentence = response.choices[0].message['content']
-        # Assume the sentence is in English and the translation in Korean is also generated
-        return sentence, "Translated Korean sentence"  # Placeholder for Korean translation
+        english_sentence = response['choices'][0]['message']['content']
+
+        translation_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a translator from English to Korean."},
+                {"role": "user", "content": f"Translate this sentence into Korean: '{english_sentence}'"}
+            ]
+        )
+        korean_translation = translation_response['choices'][0]['message']['content']
+
+        return english_sentence, korean_translation
     except Exception as e:
-        st.error("Error generating sentence: " + str(e))
+        st.error(f"API 호출 중 오류가 발생했습니다: {e}")
         return None, None
 
 # 사용자 인터페이스와 로직 흐름
