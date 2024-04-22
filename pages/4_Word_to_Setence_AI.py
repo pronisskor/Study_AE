@@ -82,7 +82,7 @@ if st.session_state.get('words_list'):
             st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
             st.markdown(f'공부한 단어 수: {st.session_state["learned_count"]}')  # 학습한 단어 수 표시
 
-if excel_url is not None and 'words_list' in st.session_state:
+if uploaded_file is not None and 'words_list' in st.session_state:
     if st.button("다음단어"):
         if not st.session_state['words_list']:
             st.markdown(f'<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.</p>', unsafe_allow_html=True)
