@@ -33,11 +33,17 @@ if 'words_list' not in st.session_state:
     st.session_state['learned_count'] = 0  # 학습 카운터를 세션 상태에 추가
 
 if st.session_state['words_list']:
-    def load_file(uploaded_file):
+    def load_file(excel_url):
         if excel_url.name.endswith('.csv'):
             return pd.read_csv(excel_url)
         elif excel_url.name.endswith('.xlsx') or excel_url.name.endswith('.xls'):
             return pd.read_excel(excel_url)    
+
+    df = load_file(excel_url)
+    words_column = 'words'
+    if df is not None and words_column in df.columns:
+        st.session_state['words_list'] = df[words_column].dropna().tolist()
+        random.shuffle(st.session_state['words_list'])
 
 def generate_sentence_with_word(word):
     try:
