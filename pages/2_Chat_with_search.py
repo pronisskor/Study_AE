@@ -6,7 +6,7 @@ import random
 st.title("영어 단어 퀴즈")
 
 # 데이터 파일의 URL을 코드에 직접 삽입
-file_url = 'https://github.com/pronisskor/Study_AE/edit/main/pages/word_quiz.xlsx'  # 실제 URL로 교체 필요
+file_url = 'http://ewking.kr/AE/word_quiz.xlsx'  # 실제 URL로 교체 필요
 
 # 파일 URL 확장자에 따라 적절한 pandas 함수를 사용하여 파일 로드
 if file_url.endswith('.csv'):
