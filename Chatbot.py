@@ -3,7 +3,7 @@ import streamlit as st
 
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    "[OpenAI API 키 받기](https://platform.openai.com/account/api-keys)"        
+    "[Open AI API 키 받으러 가기](https://platform.openai.com/account/api-keys)"        
 
 st.title("💬 Chatbot")
 st.caption("🚀 A streamlit chatbot powered by OpenAI LLM")
