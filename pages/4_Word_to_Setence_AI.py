@@ -39,6 +39,12 @@ if st.session_state['words_list']:
         elif excel_url.name.endswith('.xlsx') or excel_url.name.endswith('.xls'):
             return pd.read_excel(excel_url)    
 
+    df = load_file(excel_url)
+    words_column = 'words'
+    if df is not None and words_column in df.columns:
+        st.session_state['words_list'] = df[words_column].dropna().tolist()
+        random.shuffle(st.session_state['words_list'])
+
 def generate_sentence_with_word(word):
     try:
         response = openai.ChatCompletion.create(
@@ -65,17 +71,20 @@ def generate_sentence_with_word(word):
         return None, None
 
 # 사용자 인터페이스와 로직 흐름
-if 'words_list' in st.session_state and st.session_state['words_list']:
-    random_word = random.choice(st.session_state['words_list'])
-    english_sentence, korean_translation = generate_sentence_with_word(random_word)
-    if english_sentence and korean_translation:
-        highlighted_english_sentence = english_sentence.replace(random_word, f'<strong>{random_word}</strong>')
-        st.markdown(f'<p style="font-size: 20px; text-align: center;">{highlighted_english_sentence}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
-        st.markdown(f'공부한 단어 수: {st.session_state["learned_count"]}')  # 학습한 단어 수 표시
+if st.session_state.get('words_list'):
+    random_word = st.session_state['words_list'].pop(0)
+    st.session_state['learned_count'] += 1  # 학습한 단어 카운트 증가
+    with st.spinner('문장 생성중...'):
+        english_sentence, korean_translation = generate_sentence_with_word(random_word)
+        if english_sentence and korean_translation:
+            highlighted_english_sentence = english_sentence.replace(random_word, f'<strong>{random_word}</strong>')
+            st.markdown(f'<p style="font-size: 20px; text-align: center;">{highlighted_english_sentence}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
+            st.markdown(f'공부한 단어 수: {st.session_state["learned_count"]}')  # 학습한 단어 수 표시
 
+if excel_url is not None and 'words_list' in st.session_state:
     if st.button("다음단어"):
         if not st.session_state['words_list']:
-            st.markdown('<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.</p>', unsafe_allow_html=True)
             del st.session_state['words_list']
             st.session_state['learned_count'] = 0  # 학습 카운터 초기화
