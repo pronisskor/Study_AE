@@ -19,7 +19,7 @@ if openai_api_key:
     langchain_openai = OpenAI(api_key=openai_api_key)
 
 # 웹에서 Excel 파일 불러오기
-excel_url = "http://ewking.kr/AE/word_Sentence.xlsx"
+excel_url = "http://ewking.kr/AE/word_setence.xlsx"
 df = pd.read_excel(excel_url)
 
 # 파일이 성공적으로 불러와졌는지 확인 후 단어 리스트 세션 상태 설정
