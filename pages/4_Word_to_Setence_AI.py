@@ -32,6 +32,13 @@ if 'words_list' not in st.session_state:
     st.session_state['words_list'] = []
     st.session_state['learned_count'] = 0  # 학습 카운터를 세션 상태에 추가
 
+if st.session_state['words_list']:
+    def load_file(uploaded_file):
+        if excel_url.name.endswith('.csv'):
+            return pd.read_csv(excel_url)
+        elif excel_url.name.endswith('.xlsx') or excel_url.name.endswith('.xls'):
+            return pd.read_excel(excel_url)    
+
 def generate_sentence_with_word(word):
     try:
         response = openai.ChatCompletion.create(
