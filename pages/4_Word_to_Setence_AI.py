@@ -19,7 +19,7 @@ if openai_api_key:
     langchain_openai = OpenAI(api_key=openai_api_key)
 
 # 웹에서 Excel 파일 불러오기
-excel_url = "http://ewking.kr/AE/word_setence.xlsx"
+excel_url = "http://ewking.kr/AE/word_sentence.xlsx"  # URL 수정 확인
 df = pd.read_excel(excel_url)
 
 # 파일이 성공적으로 불러와졌는지 확인 후 단어 리스트 세션 상태 설정
@@ -54,6 +54,10 @@ def generate_sentence_with_word(word):
         st.error(f"API 호출 중 오류가 발생했습니다: {e}")
         return None, None
 
+if st.button("Restart"):
+    st.session_state.pop('words_list', None)
+    st.session_state['learned_count'] = 0  # 세션 카운터 리셋
+
 if st.session_state.get('words_list'):
     random_word = st.session_state['words_list'].pop(0)
     st.session_state['learned_count'] += 1  # 학습한 단어 카운트 증가
@@ -64,11 +68,12 @@ if st.session_state.get('words_list'):
             st.markdown(f'<p style="font-size: 20px; text-align: center;">{highlighted_english_sentence}</p>', unsafe_allow_html=True)
             st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
             st.markdown(f'공부한 단어 수: {st.session_state["learned_count"]}')  # 학습한 단어 수 표시
-    
+
 if st.session_state['words_list']:
     if st.button("다음단어"):
         st.experimental_rerun()
 else:
-    st.markdown('<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.</p>', unsafe_allow_html=True)
-    del st.session_state['words_list']
-    st.session_state['learned_count'] = 0  # 학습 카운터 초기화
+    if not st.session_state.get('words_list'):
+        st.markdown('<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.</p>', unsafe_allow_html=True)
+        del st.session_state['words_list']
+        st.session_state['learned_count'] = 0  # 학습 카운터 초기화
