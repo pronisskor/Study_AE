@@ -39,12 +39,6 @@ if st.session_state['words_list']:
         elif excel_url.name.endswith('.xlsx') or excel_url.name.endswith('.xls'):
             return pd.read_excel(excel_url)    
 
-    df = load_file(excel_url)
-    words_column = 'words'
-    if df is not None and words_column in df.columns:
-        st.session_state['words_list'] = df[words_column].dropna().tolist()
-        random.shuffle(st.session_state['words_list'])
-
 def generate_sentence_with_word(word):
     try:
         response = openai.ChatCompletion.create(
