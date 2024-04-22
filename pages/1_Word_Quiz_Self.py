@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 with st.sidebar:
-    anthropic_api_key = st.text_input("Anthropic API Key", key="file_qa_api_key", type="password")
+    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Open AI API 키 받으러 가기](https://platform.openai.com/account/api-keys)"    
 
 st.title("영어 단어 퀴즈")
