@@ -3,10 +3,9 @@ import anthropic
 
 with st.sidebar:
     anthropic_api_key = st.text_input("Anthropic API Key", key="file_qa_api_key", type="password")
-    "[View the source code](https://github.com/streamlit/llm-examples/blob/main/pages/1_File_Q%26A.py)"
-    "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+    "[Open AI API 키 받으러 가기](https://platform.openai.com/account/api-keys)"    
 
-st.title("📝 File Q&A with Anthropic")
+st.title("📝영어 단어 퀴즈")
 uploaded_file = st.file_uploader("Upload an article", type=("txt", "md"))
 question = st.text_input(
     "Ask something about the article",
