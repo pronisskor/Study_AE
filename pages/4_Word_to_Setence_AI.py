@@ -19,11 +19,12 @@ if openai_api_key:
     openai.api_key = openai_api_key
     langchain_openai = OpenAI(api_key=openai_api_key)
 
-# 세션 상태 초기화
+if 'start' not in st.session_state:
+    st.session_state['start'] = False
+
 if 'ai_words_list' not in st.session_state or 'ai_learned_count' not in st.session_state:
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
-    st.session_state['start'] = False
 
 def load_words():
     file_name = 'http://ewking.kr/AE/word_sentence.xlsx'
@@ -61,15 +62,19 @@ def generate_sentence_with_word(word):
         st.error(f"API 호출 중 오류가 발생했습니다: {e}")
         return None, None
 
-if st.button('New Generate'):
-    st.session_state['start'] = True
-    st.session_state['ai_words_list'] = []
-    st.session_state['ai_learned_count'] = 0
-    load_words()
+def restart_study():
+    if st.button('New Generate'):
+        st.session_state['start'] = False
+        st.session_state['ai_words_list'] = []
+        st.session_state['ai_learned_count'] = 0
+        load_words()
+        st.session_state['start'] = True
+
+restart_study()
 
 if st.session_state['start'] and st.session_state.get('ai_words_list'):
     random_word = st.session_state['ai_words_list'].pop(0)
-    st.session_state['ai_learned_count'] += 1
+    st.session_state['ai_learned_count'] += 1  # 학습한 단어 카운트 증가
     with st.spinner('문장 생성중...'):
         english_sentence, korean_translation = generate_sentence_with_word(random_word)
         if english_sentence and korean_translation:
@@ -80,5 +85,9 @@ if st.session_state['start'] and st.session_state.get('ai_words_list'):
 
     if st.button('다음 단어') or not st.session_state.get('ai_words_list'):
         if not st.session_state['ai_words_list']:
-            st.markdown('<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.<br>다시 시작하려면 다시시작 버튼을 누르세요.</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.<br>다시 시작하려면 다시시작 버튼을 누르세요.</p>', unsafe_allow_html=True)
             st.session_state['start'] = False
+            st.session_state['ai_words_list'] = []
+            st.session_state['ai_learned_count'] = 0
+            load_words()  # 다시 시작하려면 단어 목록을 다시 로드
+            st.session_state['start'] = True
