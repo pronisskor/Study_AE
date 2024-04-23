@@ -20,8 +20,7 @@ if openai_api_key:
     langchain_openai = OpenAI(api_key=openai_api_key)
 
 # 세션 상태 초기화
-if 'start' not in st.session_state:
-    st.session_state['start'] = False
+st.session_state['start'] = False  # 페이지 로드시 항상 False로 리셋
 if 'ai_words_list' not in st.session_state or 'ai_learned_count' not in st.session_state:
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
@@ -62,14 +61,14 @@ def generate_sentence_with_word(word):
         st.error(f"API 호출 중 오류가 발생했습니다: {e}")
         return None, None
 
-def restart_study():
+if st.button('New Generate'):
     st.session_state['start'] = True
+    restart_study()
+
+def restart_study():
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
     load_words()
-
-if st.button('New Generate'):
-    restart_study()
 
 if st.session_state['start'] and st.session_state.get('ai_words_list'):
     random_word = st.session_state['ai_words_list'].pop(0)
