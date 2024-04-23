@@ -63,13 +63,13 @@ def generate_sentence_with_word(word):
         return None, None
 
 def restart_study():
-    if st.button('New Generate'):
-        st.session_state['start'] = True
-        st.session_state['ai_words_list'] = []
-        st.session_state['ai_learned_count'] = 0
-        load_words()
+    st.session_state['start'] = True
+    st.session_state['ai_words_list'] = []
+    st.session_state['ai_learned_count'] = 0
+    load_words()
 
-restart_study()
+if st.button('New Generate'):
+    restart_study()
 
 if st.session_state['start'] and st.session_state.get('ai_words_list'):
     random_word = st.session_state['ai_words_list'].pop(0)
