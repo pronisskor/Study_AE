@@ -7,7 +7,7 @@ import pandas as pd
 import random
 
 # Streamlit 페이지 타이틀 설정
-st.title("🦜🔗 Word to Sentence")
+st.title("🦜🔗 Word to Sentence Self")
 
 # 사이드바 설정
 with st.sidebar:
