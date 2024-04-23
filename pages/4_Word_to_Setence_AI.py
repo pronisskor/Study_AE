@@ -20,11 +20,10 @@ if openai_api_key:
     langchain_openai = OpenAI(api_key=openai_api_key)
 
 # 세션 상태 초기화
-if 'start' not in st.session_state:
-    st.session_state['start'] = False
 if 'ai_words_list' not in st.session_state or 'ai_learned_count' not in st.session_state:
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
+    st.session_state['start'] = False
 
 def load_words():
     file_name = 'http://ewking.kr/AE/word_sentence.xlsx'
@@ -69,13 +68,17 @@ if st.button('New Generate'):
     load_words()
 
 if st.session_state['start'] and st.session_state.get('ai_words_list'):
-    if st.button('다음 단어'):
-        random_word = st.session_state['ai_words_list'].pop(0)
-        st.session_state['ai_learned_count'] += 1
-        with st.spinner('문장 생성중...'):
-            english_sentence, korean_translation = generate_sentence_with_word(random_word)
-            if english_sentence and korean_translation:
-                highlighted_english_sentence = english_sentence.replace(random_word, f'<strong>{random_word}</strong>')
-                st.markdown(f'<p style="font-size: 20px; text-align: center;">{highlighted_english_sentence}</p>', unsafe_allow_html=True)
-                st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
-                st.markdown(f'공부한 단어 수: {st.session_state["ai_learned_count"]}')  # 학습한 단어 수 표시
+    random_word = st.session_state['ai_words_list'].pop(0)
+    st.session_state['ai_learned_count'] += 1
+    with st.spinner('문장 생성중...'):
+        english_sentence, korean_translation = generate_sentence_with_word(random_word)
+        if english_sentence and korean_translation:
+            highlighted_english_sentence = english_sentence.replace(random_word, f'<strong>{random_word}</strong>')
+            st.markdown(f'<p style="font-size: 20px; text-align: center;">{highlighted_english_sentence}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size: 20px; text-align: center;">{korean_translation}</p>', unsafe_allow_html=True)
+            st.markdown(f'공부한 단어 수: {st.session_state["ai_learned_count"]}')  # 학습한 단어 수 표시
+
+    if st.button('다음 단어') or not st.session_state.get('ai_words_list'):
+        if not st.session_state['ai_words_list']:
+            st.markdown('<p style="background-color: #bffff2; padding: 10px;">모든 단어에 대한 문장을 생성했습니다.<br>다시 시작하려면 다시시작 버튼을 누르세요.</p>', unsafe_allow_html=True)
+            st.session_state['start'] = False
