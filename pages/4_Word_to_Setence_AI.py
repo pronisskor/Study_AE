@@ -37,6 +37,31 @@ def load_words():
         st.session_state['ai_words_list'] = df[words_column].dropna().tolist()
         random.shuffle(st.session_state['ai_words_list'])
 
+def generate_sentence_with_word(word):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a conversation sentence generator."},
+                {"role": "user", "content": f"Please create a short and simple sentence using the word '{word}'."}
+            ]
+        )
+        english_sentence = response.choices[0].message.content
+
+        translation_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a translator from English to Korean."},
+                {"role": "user", "content": f"Translate this sentence into Korean: '{english_sentence}'"}
+            ]
+        )
+        korean_translation = translation_response.choices[0].message.content
+
+        return english_sentence, korean_translation
+    except Exception as e:
+        st.error(f"API 호출 중 오류가 발생했습니다: {e}")
+        return None, None
+
 def restart_study():
     if st.button('New Generate'):
         st.session_state['start'] = True
