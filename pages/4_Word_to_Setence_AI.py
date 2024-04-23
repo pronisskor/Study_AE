@@ -19,9 +19,10 @@ if openai_api_key:
     openai.api_key = openai_api_key
     langchain_openai = OpenAI(api_key=openai_api_key)
 
+# 페이지 로드 시마다 start를 False로 설정
+st.session_state['start'] = False
+
 # 세션 상태 초기화
-if 'start' not in st.session_state:
-    st.session_state['start'] = False
 if 'ai_words_list' not in st.session_state or 'ai_learned_count' not in st.session_state:
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
