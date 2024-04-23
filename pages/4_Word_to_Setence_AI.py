@@ -20,7 +20,8 @@ if openai_api_key:
     langchain_openai = OpenAI(api_key=openai_api_key)
 
 # 세션 상태 초기화
-st.session_state['start'] = False  # 페이지 로드시 항상 False로 리셋
+if 'start' not in st.session_state:
+    st.session_state['start'] = False
 if 'ai_words_list' not in st.session_state or 'ai_learned_count' not in st.session_state:
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
@@ -63,9 +64,6 @@ def generate_sentence_with_word(word):
 
 if st.button('New Generate'):
     st.session_state['start'] = True
-    restart_study()
-
-def restart_study():
     st.session_state['ai_words_list'] = []
     st.session_state['ai_learned_count'] = 0
     load_words()
